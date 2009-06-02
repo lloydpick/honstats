@@ -4,15 +4,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 module HonStats
   module Classes
     class Character
-      attr_reader :account_id, :character_name, :level, :wins, :losses, :buybacks,
-                  :disconnects, :average_score, :hero_kills, :hero_damage, :hero_xp,
-                  :hero_kills_gold, :hero_assists, :deaths, :gold_lost_to_deaths,
-                  :seconds_dead, :creep_kills, :creep_kills_damage, :creep_kill_xp,
-                  :creep_kills_gold, :creep_denies, :creep_denies_xp, :neutral_kills,
-                  :neutral_kill_damage, :neutral_kill_xp, :neutral_kill_gold,
-                  :building_damage, :building_xp, :building_raized, :building_gold,
-                  :gold_earned, :gold_spent, :xp_earned, :actions_made, :time_played,
-                  :account_created, :last_match_id, :last_match_date
+      attr_reader :account_id, :character_name, :account, :building, :creep,
+                  :game, :hero, :last_match, :neutral
 
       alias_method :to_s, :character_name
       alias_method :to_i, :account_id
@@ -35,60 +28,20 @@ module HonStats
         data = Net::HTTP.post_form(URI.parse(url), {"f"=>"get_all_stats", "account_id[0]"=>"#{@account_id}"})
         if data.class.to_s == "Net::HTTPOK"
 
-          @level =                get_data("level", data).to_i
-          @wins =                 get_data("acc_wins", data).to_i
-          @losses =               get_data("acc_losses", data).to_i
-          @buybacks =             get_data("acc_buybacks", data).to_i
-          @disconnects =          get_data("acc_discos", data).to_i
-          @average_score =        get_data("acc_avg_score", data).to_f
-          @hero_kills =           get_data("acc_herokills", data).to_i
-          @hero_damage =          get_data("acc_herodmg", data).to_i
-          @hero_xp =              get_data("acc_heroexp", data).to_i
-          @hero_kills_gold =      get_data("acc_herokillsgold", data).to_i
-          @hero_assists =         get_data("acc_heroassists", data).to_i
-          @deaths =               get_data("acc_deaths", data).to_i
-          @gold_lost_to_deaths =  get_data("acc_goldlost2death", data).to_i
-          @seconds_dead =         get_data("acc_secs_dead", data).to_i
-          @creep_kills =          get_data("acc_teamcreepkills", data).to_i
-          @creep_kill_damage =    get_data("acc_teamcreepdmg", data).to_i
-          @creep_kill_xp =        get_data("acc_teamcreepexp", data).to_i
-          @creep_kill_gold =      get_data("acc_teamcreepgold", data).to_i
-          @creep_denies =         get_data("acc_denies", data).to_i
-          @creep_denies_xp =      get_data("acc_exp_denied", data).to_i
-          @neutral_kills =        get_data("acc_neutralcreepkills", data).to_i
-          @neutral_kill_damage =  get_data("acc_neutralcreepdmg", data).to_i
-          @neutral_kill_xp =      get_data("acc_neutralcreepexp", data).to_i
-          @neutral_kill_gold =    get_data("acc_teamcreepgold", data).to_i
-          @building_damage =      get_data("acc_bdmg", data).to_i
-          @building_xp =          get_data("acc_bdmgexp", data).to_i
-          @building_raized =      get_data("acc_razed", data).to_i
-          @building_gold =        get_data("acc_bgold", data).to_i
-          @gold_earned =          get_data("acc_gold", data).to_i
-          @gold_spent =           get_data("acc_gold_spent", data).to_i
-          @xp_earned =            get_data("acc_exp", data).to_i
-          @actions_made =         get_data("acc_actions", data).to_i
-          @time_played =          get_data("acc_secs", data).to_i
-          @character_name =       get_data("nickname", data).to_s
-          @account_created =      get_data("create_date", data).to_s
-          @last_match_id =        get_data("match_id", data).to_i
-          @last_match_date =      get_data("mdt", data).to_s
+          @account_id =           HonStats::API.get_data("account_id", data).to_i
+          @character_name =       HonStats::API.get_data("nickname", data).to_s
+          @account =              Account.new(data)
+          @building =             Building.new(data)
+          @creep =                Creep.new(data)
+          @game =                 Game.new(data)
+          @hero =                 Hero.new(data)
+          @last_match =           LastMatch.new(data)
+          @neutral =              Neutral.new(data)
 
         end
-
       end
-
 
       protected
-
-      # Used to fetch the data from the messy JSON type string sent back from the
-      # server, might be a better/faster/cleaner way of doing this
-      def get_data(attribute, data)
-        data = data.body
-        data = data.split(attribute)
-        data = data[1].split(";")
-        data = data[1].split("\"")
-        data[1]
-      end
 
       # Return the base_url of the API if available, otherwise send back the default
 			def base
@@ -100,6 +53,103 @@ module HonStats
 			end
 
     end
+
+    # Consilidated Account stats
+		class Account
+			attr_reader :id, :name, :created_at
+
+			def initialize(data)
+        @id =         HonStats::API.get_data("account_id", data).to_i
+        @name =       HonStats::API.get_data("nickname", data).to_s
+				@created_at = HonStats::API.get_data("create_date", data).to_s
+			end
+		end
+
+    # Consilidated game stats
+		class Game
+			attr_reader :wins, :losses, :win_percentage, :disconnects, :time_played,
+                  :level, :gold_earned, :gold_spent, :xp_earned, :actions_made
+                  :average_score
+
+			def initialize(data)
+				@wins =           HonStats::API.get_data("acc_wins", data).to_i
+        @losses =         HonStats::API.get_data("acc_losses", data).to_i
+        @win_percentage = "%.02f" % ((@wins.to_f / (@wins + @losses)) * 100)
+        @disconnects =    HonStats::API.get_data("acc_discos", data).to_i
+        @time_played =    HonStats::API.get_data("acc_secs", data).to_i
+        @level =          HonStats::API.get_data("level", data).to_i
+        @gold_earned =    HonStats::API.get_data("acc_gold", data).to_i
+        @gold_spent =     HonStats::API.get_data("acc_gold_spent", data).to_i
+        @xp_earned =      HonStats::API.get_data("acc_exp", data).to_i
+        @actions_made =   HonStats::API.get_data("acc_actions", data).to_i
+        @average_score =  HonStats::API.get_data("acc_avg_score", data).to_f
+			end
+		end
+
+    # Consilidated creep stats
+		class Creep
+			attr_reader :kills, :damage, :xp, :gold, :denies, :denied_xp
+
+			def initialize(data)
+				@kills =     HonStats::API.get_data("acc_teamcreepkills", data).to_i
+        @damage =    HonStats::API.get_data("acc_teamcreepdmg", data).to_i
+        @xp =        HonStats::API.get_data("acc_teamcreepexp", data).to_i
+        @gold =      HonStats::API.get_data("acc_teamcreepgold", data).to_i
+        @denies =    HonStats::API.get_data("acc_denies", data).to_i
+        @denied_xp = HonStats::API.get_data("acc_exp_denied", data).to_i
+			end
+		end
+
+    # Consilidated neutral creep stats
+		class Neutral
+			attr_reader :kills, :damage, :xp, :gold
+
+			def initialize(data)
+				@kills =  HonStats::API.get_data("acc_neutralcreepkills", data).to_i
+        @damage = HonStats::API.get_data("acc_neutralcreepdmg", data).to_i
+        @xp =     HonStats::API.get_data("acc_neutralcreepexp", data).to_i
+        @gold =   HonStats::API.get_data("acc_neutralcreepgold", data).to_i
+			end
+		end
+
+    # Consilidated hero stats
+		class Hero
+			attr_reader :kills, :damage, :xp, :gold, :assists, :deaths, :gold_lost, :seconds_dead, :buybacks
+
+			def initialize(data)
+				@kills =        HonStats::API.get_data("acc_herokills", data).to_i
+        @damage =       HonStats::API.get_data("acc_herodmg", data).to_i
+        @xp =           HonStats::API.get_data("acc_heroexp", data).to_i
+        @gold =         HonStats::API.get_data("acc_herokillsgold", data).to_i
+        @assists =      HonStats::API.get_data("acc_heroassists", data).to_i
+        @deaths =       HonStats::API.get_data("acc_deaths", data).to_i
+        @gold_lost =    HonStats::API.get_data("acc_goldlost2death", data).to_i
+        @seconds_dead = HonStats::API.get_data("acc_secs_dead", data).to_i
+        @buybacks =     HonStats::API.get_data("acc_buybacks", data).to_i
+			end
+		end
+
+    # Consilidated neutral creep stats
+		class Building
+			attr_reader :damage, :xp, :raized, :gold
+
+			def initialize(data)
+				@damage = HonStats::API.get_data("acc_bdmg", data).to_i
+        @xp =     HonStats::API.get_data("acc_bdmgexp", data).to_i
+        @raized = HonStats::API.get_data("acc_razed", data).to_i
+        @gold =   HonStats::API.get_data("acc_bgold", data).to_i
+			end
+		end
+
+    # Consilidated last match stats
+		class LastMatch
+			attr_reader :id, :date
+
+			def initialize(data)
+				@id =   HonStats::API.get_data("match_id", data).to_i
+        @date = HonStats::API.get_data("mdt", data).to_s
+			end
+		end
 
     class	SearchCharacter < Character
 		end
