@@ -117,6 +117,15 @@ module HonStats
 			return str
 		end
 
+    # Used to fetch the data from the messy JSON type string sent back from the
+    # server, might be a better/faster/cleaner way of doing this
+    def self.get_data(attribute, data)
+      data = data.body
+      data = data.split(attribute)
+      data = data[1].split(";")
+      data = data[1].split("\"")
+      data[1]
+    end
 
     protected
 
