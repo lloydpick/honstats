@@ -6,10 +6,14 @@ for this to function correctly.
 
 This will return all the player statistics for the player named "Limi"
 
+    require 'honstats'
     honstats = HonStats::API.new
     char = honstats.get_character("Limi")
     char.class.to_s
     => HonStats::Classes::Character
+
+If you were to call <tt>to_s</tt> or <tt>to_i</tt> to the <tt>char</tt> variable
+you would get the character account name and account id respectively.
 
 From there you can access inidividual statistics by sections...
 
