@@ -33,8 +33,8 @@ module HonStats
           @account =              Account.new(data)
           @building =             Building.new(data)
           @creep =                Creep.new(data)
-          @game =                 Game.new(data)
           @hero =                 Hero.new(data)
+          @game =                 Game.new(data, @hero, @creep)
           @last_match =           LastMatch.new(data)
           @neutral =              Neutral.new(data)
 
@@ -68,14 +68,21 @@ module HonStats
     # Consilidated game stats
 		class Game
 			attr_reader :wins, :losses, :win_percentage, :disconnects, :time_played,
-                  :level, :gold_earned, :gold_spent, :xp_earned, :actions_made
-                  :average_score
+                  :level, :gold_earned, :gold_spent, :xp_earned, :actions_made,
+                  :average_score, :xp_earned_per_minute, :gold_earned_per_minute,
+                  :actions_per_minute, :average_game_length_in_seconds, :played,
+                  :average_kills_per_game, :average_kills_per_game,
+                  :average_deaths_per_game, :average_assists_per_game,
+                  :disconnect_percentage, :average_xp_earned_per_game,
+                  :average_creep_kills_per_game, :average_creep_denies_per_game
 
-			def initialize(data)
+			def initialize(data, hero_stats, creep_stats)
 				@wins =           HonStats::API.get_data("acc_wins", data).to_i
         @losses =         HonStats::API.get_data("acc_losses", data).to_i
-        @win_percentage = "%.02f" % ((@wins.to_f / (@wins + @losses)) * 100)
         @disconnects =    HonStats::API.get_data("acc_discos", data).to_i
+        @played =         @wins + @losses
+        @disconnect_percentage = "%.02f" % ((@disconnects.to_f / @played) * 100)
+        @win_percentage = "%.02f" % ((@wins.to_f / @played) * 100)
         @time_played =    HonStats::API.get_data("acc_secs", data).to_i
         @level =          HonStats::API.get_data("level", data).to_i
         @gold_earned =    HonStats::API.get_data("acc_gold", data).to_i
@@ -83,12 +90,29 @@ module HonStats
         @xp_earned =      HonStats::API.get_data("acc_exp", data).to_i
         @actions_made =   HonStats::API.get_data("acc_actions", data).to_i
         @average_score =  HonStats::API.get_data("acc_avg_score", data).to_f
+
+        minutes_played = @time_played / 60
+        @xp_earned_per_minute = "%.02f" % (@xp_earned.to_f / minutes_played.to_f)
+        @gold_earned_per_minute = "%.02f" % (@gold_earned.to_f / minutes_played.to_f)
+        @actions_per_minute = "%.02f" % (@actions_made.to_f / minutes_played.to_f)
+
+        @average_game_length_in_seconds = (@time_played.to_f / @played).to_i
+        
+        @average_kills_per_game = "%.02f" % (hero_stats.kills.to_f / @played)
+        @average_deaths_per_game = "%.02f" % (hero_stats.deaths.to_f / @played)
+        @average_assists_per_game = "%.02f" % (hero_stats.assists.to_f / @played)
+        
+        @average_xp_earned_per_game = "%.02f" % (@xp_earned.to_f / @played)
+
+        @average_creep_kills_per_game = "%.02f" % (creep_stats.kills.to_f / @played)
+        @average_creep_denies_per_game = "%.02f" % (creep_stats.denies.to_f / @played)
 			end
 		end
 
     # Consilidated creep stats
 		class Creep
-			attr_reader :kills, :damage, :xp, :gold, :denies, :denied_xp
+			attr_reader :kills, :damage, :xp, :gold, :denies, :denied_xp, :kills_per_minute,
+                  :xp_per_minute, :denies_per_minute, :denied_xp_per_minute
 
 			def initialize(data)
 				@kills =     HonStats::API.get_data("acc_teamcreepkills", data).to_i
@@ -97,24 +121,36 @@ module HonStats
         @gold =      HonStats::API.get_data("acc_teamcreepgold", data).to_i
         @denies =    HonStats::API.get_data("acc_denies", data).to_i
         @denied_xp = HonStats::API.get_data("acc_exp_denied", data).to_i
+
+        minutes_played = HonStats::API.get_data("acc_secs", data).to_i / 60
+        @kills_per_minute = "%.02f" % (@kills.to_f / minutes_played.to_f)
+        @xp_per_minute = "%.02f" % (@xp.to_f / minutes_played.to_f)
+        @denies_per_minute = "%.02f" % (@denies.to_f / minutes_played.to_f)
+        @denied_xp_per_minute = "%.02f" % (@denied_xp.to_f / minutes_played.to_f)
 			end
 		end
 
     # Consilidated neutral creep stats
 		class Neutral
-			attr_reader :kills, :damage, :xp, :gold
+			attr_reader :kills, :damage, :xp, :gold, :kills_per_minute, :xp_per_minute
 
 			def initialize(data)
 				@kills =  HonStats::API.get_data("acc_neutralcreepkills", data).to_i
         @damage = HonStats::API.get_data("acc_neutralcreepdmg", data).to_i
         @xp =     HonStats::API.get_data("acc_neutralcreepexp", data).to_i
         @gold =   HonStats::API.get_data("acc_neutralcreepgold", data).to_i
+
+        minutes_played = HonStats::API.get_data("acc_secs", data).to_i / 60
+        @kills_per_minute = "%.02f" % (@kills.to_f / minutes_played.to_f)
+        @xp_per_minute = "%.02f" % (@xp.to_f / minutes_played.to_f)
 			end
 		end
 
     # Consilidated hero stats
 		class Hero
-			attr_reader :kills, :damage, :xp, :gold, :assists, :deaths, :gold_lost, :seconds_dead, :buybacks
+			attr_reader :kills, :damage, :xp, :gold, :assists, :deaths, :gold_lost, 
+                  :seconds_dead, :buybacks, :kills_per_minute, :xp_per_minute,
+                  :time_dead_percentage, :assists_per_minute, :kill_death_ratio
 
 			def initialize(data)
 				@kills =        HonStats::API.get_data("acc_herokills", data).to_i
@@ -126,6 +162,14 @@ module HonStats
         @gold_lost =    HonStats::API.get_data("acc_goldlost2death", data).to_i
         @seconds_dead = HonStats::API.get_data("acc_secs_dead", data).to_i
         @buybacks =     HonStats::API.get_data("acc_buybacks", data).to_i
+
+        seconds_played = HonStats::API.get_data("acc_secs", data).to_i
+        minutes_played = seconds_played / 60
+        @kills_per_minute = "%.02f" % (@kills.to_f / minutes_played.to_f)
+        @assists_per_minute = "%.02f" % (@assists.to_f / minutes_played.to_f)
+        @xp_per_minute = "%.02f" % (@xp.to_f / minutes_played.to_f)
+        @time_dead_percentage = "%.02f" % ((@seconds_dead.to_f / seconds_played.to_f) * 100)
+        @kill_death_ratio = "%.02f" % (@kills.to_f / @deaths.to_f)
 			end
 		end
 
