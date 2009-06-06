@@ -61,7 +61,7 @@ module HonStats
 			def initialize(data)
         @id =         HonStats::API.get_data("account_id", data).to_i
         @name =       HonStats::API.get_data("nickname", data).to_s
-				@created_at = HonStats::API.get_data("create_date", data).to_s
+				@created_at = Time.parse(HonStats::API.get_data("create_date", data).to_s)
 			end
 		end
 
@@ -71,10 +71,10 @@ module HonStats
                   :level, :gold_earned, :gold_spent, :xp_earned, :actions_made,
                   :average_score, :xp_earned_per_minute, :gold_earned_per_minute,
                   :actions_per_minute, :average_game_length_in_seconds, :played,
-                  :average_kills_per_game, :average_kills_per_game,
-                  :average_deaths_per_game, :average_assists_per_game,
-                  :disconnect_percentage, :average_xp_earned_per_game,
-                  :average_creep_kills_per_game, :average_creep_denies_per_game
+                  :average_kills_per_game, :average_deaths_per_game,
+                  :average_assists_per_game, :disconnect_percentage,
+                  :average_xp_earned_per_game, :average_creep_kills_per_game,
+                  :average_creep_denies_per_game
 
 			def initialize(data, hero_stats, creep_stats)
 				@wins =           HonStats::API.get_data("acc_wins", data).to_i
@@ -191,7 +191,7 @@ module HonStats
 
 			def initialize(data)
 				@id =   HonStats::API.get_data("match_id", data).to_i
-        @date = HonStats::API.get_data("mdt", data).to_s
+        @date = Time.parse(HonStats::API.get_data("mdt", data).to_s)
 			end
 		end
 
