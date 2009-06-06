@@ -121,7 +121,7 @@ module HonStats
     # server, might be a better/faster/cleaner way of doing this
     def self.get_data(attribute, data)
       data = data.body
-      data = data.split(attribute)
+      data = data.split("\"#{attribute}\"")
       data = data[1].split(";")
       data = data[1].split("\"")
       data[1]
