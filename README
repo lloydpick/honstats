@@ -35,9 +35,9 @@ From there you can access inidividual statistics by sections...
 Each individual section holds different statistics...
 
 Account
-    :id                   Account ID number
-    :name                 Account name
-    :created_at           Account creation date
+    :id                             Account ID number
+    :name                           Account name
+    :created_at                     Account creation date
 
 Building
     :damage                         Damage done to buildings
