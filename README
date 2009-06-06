@@ -1,0 +1,107 @@
+Returns an object which contains all the player statistics avaialable for
+the user specified. You must specify a username rather than an account ID
+for this to function correctly.
+
+=== Examples
+
+This will return all the player statistics for the player named "Limi"
+
+    honstats = HonStats::API.new
+    char = honstats.get_character("Limi")
+    char.class.to_s
+    => HonStats::Classes::Character
+
+From there you can access inidividual statistics by sections...
+
+    char.account.inspect
+    char.building.inspect
+    char.creep.inspect
+    char.hero.inspect
+    char.game.inspect
+    char.lastmatch.inspect
+    char.neutral.inspect
+
+...or by querying them directly...
+
+    char.hero.kills
+    => 304
+    char.creep.kills
+    => 5329
+
+Each individual section holds different statistics...
+
+Account
+    :id                   Account ID number
+    :name                 Account name
+    :created_at           Account creation date
+
+Building
+    :damage                         Damage done to buildings
+    :xp                             XP gained from raizing buildings (currently 0)
+    :raized                         Number of buildings raized
+    :gold                           Gold earned from buildings raized
+
+Creep
+    :kills                          Number of creep kills
+    :damage                         Damage done to creep
+    :xp                             XP gained from killing creeps
+    :gold                           Gold earned from killing creeps
+    :denies                         Number of denied creeps
+    :denied_xp                      XP denied due to denied creeps
+    :kills_per_minute               Number of creep kills per minute
+    :xp_per_minute                  Amount of XP earned per minute from creep kills
+    :denies_per_minute              Number of denied creep kills per minute
+    :denied_xp_per_minute           Amount of XP denied per minute from creep denies
+
+Hero
+    :kills                          Number of hero kills
+    :damage                         Damage done to enemy heroes
+    :xp                             XP gained from killing heroes
+    :gold                           Gold earned from killing heroes
+    :assists                        Number of hero kills assisted in
+    :deaths                         Number of hero deaths
+    :gold_lost                      Amount of gold lost due to hero deaths
+    :seconds_dead                   Number of seconds spent dead
+    :buybacks                       Number of hero buybacks
+    :kills_per_minute               Number of hero kills per minute
+    :xp_per_minute                  XP gained per minute from hero kills
+    :time_dead_percentage           Percentage of the time spent dead
+    :assists_per_minute             Number of hero kill assists per minute
+    :kill_death_ratio               Hero kill to death ratio
+
+Game
+    :wins                           Number of games won
+    :losses                         Number of games lost
+    :win_percentage                 Percentage of games won
+    :disconnects                    Number of game disconnects
+    :time_played                    Time played in seconds
+    :level                          Account Level
+    :gold_earned                    Gold earned overall
+    :gold_spent                     Gold spent overall
+    :xp_earned                      XP earned overall
+    :actions_made                   Number of actions made
+    :average_score                  ?? - Unknown
+    :xp_earned_per_minute           XP earned per minute
+    :gold_earned_per_minute         Gold earned per minute
+    :actions_per_minute             Number of actions per minute
+    :average_game_length_in_seconds Average Number of seconds per game
+    :played                         Number of games played
+    :average_kills_per_game         Average number of hero kills per game
+    :average_deaths_per_game        Average number of hero deaths per game
+    :average_assists_per_game       Average number of hero assists per game
+    :disconnect_percentage          Percentage of number of games disconnected
+    :average_xp_earned_per_game     Average amount of XP earned per game
+    :average_creep_kills_per_game   Average number of creep kills per game
+    :average_creep_denies_per_game  Average number of creep denies per game
+
+Last_Match
+    :id                             Game ID of the last match
+    :date                           Date of the last match played
+
+Neutral
+    :kills                          Number of neutral creep kills
+    :damage                         Damage done to neutral creeps
+    :xp                             XP earned from neutral creep kills
+    :gold                           Gold earned from neutral creep kills
+    :kills_per_minute               Number of neutral creep kills per minute
+    :xp_per_minute                  XP earned per minute from neutral creep kills
