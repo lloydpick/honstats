@@ -82,7 +82,7 @@ module HonStats
 			return search(options)
 		end
 
-    
+
     def get_character(name = @character_name, options = {})
       if (name.is_a?(Hash))
 				options = name
@@ -122,9 +122,11 @@ module HonStats
     def self.get_data(attribute, data)
       data = data.body
       data = data.split("\"#{attribute}\"")
-      data = data[1].split(";")
-      data = data[1].split("\"")
-      data[1]
+      if data[1]
+        data = data[1].split(";")
+        data = data[1].split("\"")
+        data[1]
+      end
     end
 
     protected

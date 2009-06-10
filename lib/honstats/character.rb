@@ -4,8 +4,8 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 module HonStats
   module Classes
     class Character
-      attr_reader :account_id, :character_name, :account, :building, :creep,
-                  :game, :hero, :last_match, :neutral
+      attr_reader :account_id, :character_name, :account, :building, :clan,
+                  :creep, :game, :hero, :last_match, :neutral
 
       alias_method :to_s, :character_name
       alias_method :to_i, :account_id
@@ -32,6 +32,7 @@ module HonStats
           @character_name =       HonStats::API.get_data("nickname", data).to_s
           @account =              Account.new(data)
           @building =             Building.new(data)
+          @clan =                 Clan.new(data)
           @creep =                Creep.new(data)
           @hero =                 Hero.new(data)
           @game =                 Game.new(data, @hero, @creep)
@@ -56,12 +57,14 @@ module HonStats
 
     # Consilidated Account stats
 		class Account
-			attr_reader :id, :name, :created_at
+			attr_reader :id, :name, :created_at, :last_login, :last_activity
 
 			def initialize(data)
-        @id =         HonStats::API.get_data("account_id", data).to_i
-        @name =       HonStats::API.get_data("nickname", data).to_s
-				@created_at = Time.parse(HonStats::API.get_data("create_date", data).to_s)
+        @id =             HonStats::API.get_data("account_id", data).to_i
+        @name =           HonStats::API.get_data("nickname", data).to_s
+				@created_at =     Time.parse(HonStats::API.get_data("create_date", data).to_s)
+        @last_login =     Time.parse(HonStats::API.get_data("last_login", data).to_s)
+        @last_activity =  Time.parse(HonStats::API.get_data("last_activity", data).to_s)
 			end
 		end
 
@@ -108,6 +111,19 @@ module HonStats
         @average_creep_denies_per_game = "%.02f" % (creep_stats.denies.to_f / @played)
 			end
 		end
+
+    # Consilidated clan info
+    class Clan
+      attr_reader :id, :name, :tag, :rank, :icon
+
+      def initialize(data)
+        @id =       HonStats::API.get_data("clan_id", data).to_i
+        @name =     HonStats::API.get_data("name", data).to_s
+        @tag =      HonStats::API.get_data("tag", data).to_s
+        @rank =     HonStats::API.get_data("rank", data).to_s
+        @icon =     HonStats::API.get_data("file_name", data).to_s
+      end
+    end
 
     # Consilidated creep stats
 		class Creep
