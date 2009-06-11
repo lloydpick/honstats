@@ -27,7 +27,7 @@ module HonStats
         url = base + @api.requester_file
         data = Net::HTTP.post_form(URI.parse(url), {"f"=>"get_all_stats", "account_id[0]"=>"#{@account_id}"})
         if data.class.to_s == "Net::HTTPOK"
-
+          data = data.body
           @account_id =           HonStats::API.get_data("account_id", data).to_i
           @character_name =       HonStats::API.get_data("nickname", data).to_s
           @account =              Account.new(data)

@@ -16,6 +16,8 @@ $:.unshift(File.dirname(__FILE__)) unless $:.include?(File.dirname(__FILE__)) ||
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'honstats/character.rb'
+require 'honstats/server.rb'
+require 'honstats/game.rb'
 
 module HonStats
   class API
@@ -29,7 +31,7 @@ module HonStats
 		}
 
     cattr_accessor :stats_base_url, :requester_file
-    attr_accessor :character_name
+    attr_accessor :character_name, :cookie
 
     # Constructor
 		# Accepts an optional hash of parameters to create defaults for all API requests
@@ -103,6 +105,49 @@ module HonStats
       return HonStats::Classes::Character.new(character_account_id, self)
     end
 
+    def get_servers(options = { :gametype => 90 })
+      options = merge_defaults(options)
+      options[:type] = HonStats::Classes::Server
+      return server_browser(options)
+    end
+
+    def get_games(options = { :gametype => 10 })
+      options = merge_defaults(options)
+      options[:type] = HonStats::Classes::Game
+      return server_browser(options)
+    end
+
+    def get_active_games(options = { :gametype => 32 })
+      options = merge_defaults(options)
+      options[:type] = HonStats::Classes::Game
+      return server_browser(options)
+    end
+
+    def server_browser(options = {})
+      options = merge_defaults(options)
+      if @cookie
+        url = self.base_url + @@requester_file
+        data = Net::HTTP.post_form(URI.parse(url), {"f"=>"server_list", "gametype"=>"#{options[:gametype]}", "cookie"=>@cookie})
+        data = data.body.split('s:9:"server_id";s:')
+        data.delete_at(0)
+        data.map! {|d| 's:9:"server_id";s:' + d }
+        output = []
+        data.each do |d|
+          output << options[:type].new(d)
+        end
+        output
+      else
+        raise "unable to access server browser data without an auth cookie, use login() first"
+      end
+    end
+
+    def login(username, password)
+      url = self.base_url + @@requester_file
+      data = Net::HTTP.post_form(URI.parse(url), {"f"=>"auth", "login"=>"#{username}", "password"=>"#{password}"})
+
+      @cookie = HonStats::API.get_data("cookie", data.body).to_s
+    end
+
     def base_url(options = {})
 			str = ""
 
@@ -120,7 +165,6 @@ module HonStats
     # Used to fetch the data from the messy JSON type string sent back from the
     # server, might be a better/faster/cleaner way of doing this
     def self.get_data(attribute, data)
-      data = data.body
       data = data.split("\"#{attribute}\"")
       if data[1]
         data = data[1].split(";")
