@@ -5,7 +5,7 @@ module HonStats
   module Classes
     class Character
       attr_reader :account_id, :character_name, :account, :building, :clan,
-                  :creep, :game, :hero, :last_match, :neutral
+                  :creep, :gamestats, :hero, :last_match, :neutral
 
       alias_method :to_s, :character_name
       alias_method :to_i, :account_id
@@ -35,10 +35,9 @@ module HonStats
           @clan =                 Clan.new(data)
           @creep =                Creep.new(data)
           @hero =                 Hero.new(data)
-          @game =                 Game.new(data, @hero, @creep)
+          @gamestats =            GameStats.new(data, @hero, @creep)
           @last_match =           LastMatch.new(data)
           @neutral =              Neutral.new(data)
-
         end
       end
 
@@ -69,7 +68,7 @@ module HonStats
 		end
 
     # Consilidated game stats
-		class Game
+		class GameStats
 			attr_reader :wins, :losses, :win_percentage, :disconnects, :time_played,
                   :level, :gold_earned, :gold_spent, :xp_earned, :actions_made,
                   :average_score, :xp_earned_per_minute, :gold_earned_per_minute,
@@ -93,22 +92,24 @@ module HonStats
         @xp_earned =      HonStats::API.get_data("acc_exp", data).to_i
         @actions_made =   HonStats::API.get_data("acc_actions", data).to_i
         @average_score =  HonStats::API.get_data("acc_avg_score", data).to_f
-
-        minutes_played = @time_played / 60
-        @xp_earned_per_minute = "%.02f" % (@xp_earned.to_f / minutes_played.to_f)
-        @gold_earned_per_minute = "%.02f" % (@gold_earned.to_f / minutes_played.to_f)
-        @actions_per_minute = "%.02f" % (@actions_made.to_f / minutes_played.to_f)
-
-        @average_game_length_in_seconds = (@time_played.to_f / @played).to_i
         
-        @average_kills_per_game = "%.02f" % (hero_stats.kills.to_f / @played)
-        @average_deaths_per_game = "%.02f" % (hero_stats.deaths.to_f / @played)
-        @average_assists_per_game = "%.02f" % (hero_stats.assists.to_f / @played)
-        
-        @average_xp_earned_per_game = "%.02f" % (@xp_earned.to_f / @played)
+        if @time_played > 0
+          minutes_played = @time_played / 60
+          @xp_earned_per_minute = "%.02f" % (@xp_earned.to_f / minutes_played.to_f)
+          @gold_earned_per_minute = "%.02f" % (@gold_earned.to_f / minutes_played.to_f)
+          @actions_per_minute = "%.02f" % (@actions_made.to_f / minutes_played.to_f)
 
-        @average_creep_kills_per_game = "%.02f" % (creep_stats.kills.to_f / @played)
-        @average_creep_denies_per_game = "%.02f" % (creep_stats.denies.to_f / @played)
+          @average_game_length_in_seconds = (@time_played.to_f / @played).to_i
+
+          @average_kills_per_game = "%.02f" % (hero_stats.kills.to_f / @played)
+          @average_deaths_per_game = "%.02f" % (hero_stats.deaths.to_f / @played)
+          @average_assists_per_game = "%.02f" % (hero_stats.assists.to_f / @played)
+
+          @average_xp_earned_per_game = "%.02f" % (@xp_earned.to_f / @played)
+
+          @average_creep_kills_per_game = "%.02f" % (creep_stats.kills.to_f / @played)
+          @average_creep_denies_per_game = "%.02f" % (creep_stats.denies.to_f / @played)
+        end
 			end
 		end
 

@@ -65,7 +65,22 @@ module HonStats
 
       case options[:type]
         when @@search_types[:character]
-          results << HonStats::Classes::SearchCharacter.new(string, self)
+          url = self.base_url + @@requester_file
+          character_names = Net::HTTP.post_form(URI.parse(url), {"f"=>"autocompleteNicks", "nickname"=>"#{options[:search]}"})
+          character_names = character_names.body.split('"')
+          character_names.each_index do |d|
+            if character_names[d].include?(";")
+              character_names.delete_at(d)
+            end
+          end
+          character_names.delete_at(0)
+
+          character_names.each do |character|
+            sheet = self.get_character(character)
+            if sheet.account.id > 0
+              results << self.get_character(character)
+            end
+          end
       end
 
       return results
@@ -101,7 +116,6 @@ module HonStats
 
       url = self.base_url + @@requester_file
       character_account_id = Net::HTTP.post_form(URI.parse(url), {"f"=>"nick2id", "nickname[0]"=>"#{options[:character_name]}"})
-
       return HonStats::Classes::Character.new(character_account_id, self)
     end
 
