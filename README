@@ -21,7 +21,7 @@ From there you can access inidividual statistics by sections...
     char.building.inspect
     char.creep.inspect
     char.hero.inspect
-    char.game.inspect
+    char.gamestats.inspect
     char.lastmatch.inspect
     char.neutral.inspect
 
@@ -38,12 +38,21 @@ Account
     :id                             Account ID number
     :name                           Account name
     :created_at                     Account creation date
+    :last_login                     Account last login date
+    :last_activity                  Account last activity date
 
 Building
     :damage                         Damage done to buildings
     :xp                             XP gained from raizing buildings (currently 0)
     :raized                         Number of buildings raized
     :gold                           Gold earned from buildings raized
+
+Clan
+    :id                             Clan ID number
+    :name                           Clan name
+    :tag                            Clan tag
+    :rank                           Clan rank
+    :icon                           Clan logo?
 
 Creep
     :kills                          Number of creep kills
@@ -73,7 +82,7 @@ Hero
     :assists_per_minute             Number of hero kill assists per minute
     :kill_death_ratio               Hero kill to death ratio
 
-Game
+GameStats
     :wins                           Number of games won
     :losses                         Number of games lost
     :win_percentage                 Percentage of games won

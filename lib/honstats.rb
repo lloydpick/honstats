@@ -114,8 +114,13 @@ module HonStats
 				raise "characer name not specified"
       end
 
-      url = self.base_url + @@requester_file
-      character_account_id = Net::HTTP.post_form(URI.parse(url), {"f"=>"nick2id", "nickname[0]"=>"#{options[:character_name]}"})
+      if options[:character_name].is_a?(String)
+        url = self.base_url + @@requester_file
+        character_account_id = Net::HTTP.post_form(URI.parse(url), {"f"=>"nick2id", "nickname[0]"=>"#{options[:character_name]}"})
+        character_account_id = character_account_id.body
+      elsif options[:character_name].is_a?(Integer)
+        character_account_id = options[:character_name]
+      end
       return HonStats::Classes::Character.new(character_account_id, self)
     end
 

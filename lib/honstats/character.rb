@@ -12,7 +12,6 @@ module HonStats
 
       def initialize(data, api = nil)
         @api = api
-        data = data.body
 
         if data.is_a?(String)
           output = data.split(";")
