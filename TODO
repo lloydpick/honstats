@@ -1,0 +1,12 @@
+Ability to interact with...
+
+Login required
+"f"=>"new_ignored", "ignored_id"=>"288", "cookie"=>cookie
+"f"=>"remove_ignored", "ignored_id"=>"288",  "cookie"=>cookie
+"f"=>"new_banned", "banned_id"=>"288", "reason"=>"blah", "cookie"=>cookie
+"f"=>"remove_banned", "banned_id"=>"288", "cookie"=>cookie
+
+Login not required
+"f"=>"ignored_list", "account_id[0]"=>"676"
+"f"=>"banned_list", "account_id[0]"=>"676"
+"f"=>"clan_list", "clan_id"=>"1"
