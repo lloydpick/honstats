@@ -31,7 +31,7 @@ module HonStats
           @character_name =       HonStats::API.get_data("nickname", data).to_s
           @account =              Account.new(data)
           @building =             Building.new(data)
-          @clan =                 Clan.new(data)
+          @clan =                 SimpleClan.new(data)
           @creep =                Creep.new(data)
           @hero =                 Hero.new(data)
           @gamestats =            GameStats.new(data, @hero, @creep)
@@ -113,7 +113,7 @@ module HonStats
 		end
 
     # Consilidated clan info
-    class Clan
+    class SimpleClan
       attr_reader :id, :name, :tag, :rank, :icon
 
       def initialize(data)

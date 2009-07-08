@@ -18,6 +18,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'honstats/character.rb'
 require 'honstats/server.rb'
 require 'honstats/game.rb'
+require 'honstats/clan.rb'
 
 module HonStats
   class API
@@ -158,6 +159,16 @@ module HonStats
       else
         raise "unable to access server browser data without an auth cookie, use login() first"
       end
+    end
+
+    def get_clan(options = {})
+      options = merge_defaults(options)
+      url = self.base_url + @@requester_file
+      data = Net::HTTP.post_form(URI.parse(url), {"f"=>"clan_list", "clan_id"=>"#{options[:clan_id]}"})
+      data = data.body.split(';a:6:{s:10:"account_id";s:')
+      data.delete_at(0)
+      data.map! {|d| 's:10:"account_id";s:' + d }
+      return HonStats::Classes::Clan.new(data)
     end
 
     def login(username, password)
