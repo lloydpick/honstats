@@ -19,6 +19,8 @@ require 'honstats/character.rb'
 require 'honstats/server.rb'
 require 'honstats/game.rb'
 require 'honstats/clan.rb'
+require 'honstats/ban.rb'
+require 'honstats/ignore.rb'
 
 module HonStats
   class API
@@ -169,6 +171,26 @@ module HonStats
       data.delete_at(0)
       data.map! {|d| 's:10:"account_id";s:' + d }
       return HonStats::Classes::Clan.new(data)
+    end
+
+    def get_banlist(options = {})
+      options = merge_defaults(options)
+      url = self.base_url + @@requester_file
+      data = Net::HTTP.post_form(URI.parse(url), {"f"=>"banned_list", "account_id[0]"=>"#{options[:account_id]}"})
+      data = data.body.split(';a:3:{s:10:"account_id";s:')
+      data.delete_at(0)
+      data.map! {|d| 's:10:"account_id";s:' + d }
+      return HonStats::Classes::Banlist::Banlist.new(data)
+    end
+
+    def get_ignorelist(options = {})
+      options = merge_defaults(options)
+      url = self.base_url + @@requester_file
+      data = Net::HTTP.post_form(URI.parse(url), {"f"=>"ignored_list", "account_id[0]"=>"#{options[:account_id]}"})
+      data = data.body.split(';a:3:{s:10:"account_id";s:')
+      data.delete_at(0)
+      data.map! {|d| 's:10:"account_id";s:' + d }
+      return HonStats::Classes::Ignorelist::Ignorelist.new(data)
     end
 
     def login(username, password)
