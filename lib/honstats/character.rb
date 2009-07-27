@@ -75,7 +75,8 @@ module HonStats
                   :average_kills_per_game, :average_deaths_per_game,
                   :average_assists_per_game, :disconnect_percentage,
                   :average_xp_earned_per_game, :average_creep_kills_per_game,
-                  :average_creep_denies_per_game
+                  :average_creep_denies_per_game, :concedes, :concede_votes,
+                  :kicked, :pub_skill
 
 			def initialize(data, hero_stats, creep_stats)
 				@wins =           HonStats::API.get_data("acc_wins", data).to_i
@@ -91,6 +92,10 @@ module HonStats
         @xp_earned =      HonStats::API.get_data("acc_exp", data).to_i
         @actions_made =   HonStats::API.get_data("acc_actions", data).to_i
         @average_score =  HonStats::API.get_data("acc_avg_score", data).to_f
+        @concedes =       HonStats::API.get_data("acc_concedes", data).to_i
+        @concede_votes =  HonStats::API.get_data("acc_concedevotes", data).to_i
+        @kicked =         HonStats::API.get_data("acc_kicked", data).to_i
+        @pub_skill =      HonStats::API.get_data("acc_pub_skill", data).to_i
         
         if @time_played > 0
           minutes_played = @time_played / 60
@@ -166,7 +171,8 @@ module HonStats
 		class Hero
 			attr_reader :kills, :damage, :xp, :gold, :assists, :deaths, :gold_lost, 
                   :seconds_dead, :buybacks, :kills_per_minute, :xp_per_minute,
-                  :time_dead_percentage, :assists_per_minute, :kill_death_ratio
+                  :time_dead_percentage, :assists_per_minute, :kill_death_ratio,
+                  :consumables, :wards
 
 			def initialize(data)
 				@kills =        HonStats::API.get_data("acc_herokills", data).to_i
@@ -178,6 +184,8 @@ module HonStats
         @gold_lost =    HonStats::API.get_data("acc_goldlost2death", data).to_i
         @seconds_dead = HonStats::API.get_data("acc_secs_dead", data).to_i
         @buybacks =     HonStats::API.get_data("acc_buybacks", data).to_i
+        @consumables =  HonStats::API.get_data("acc_consumables", data).to_i
+        @wards =        HonStats::API.get_data("acc_wards", data).to_i
 
         seconds_played = HonStats::API.get_data("acc_secs", data).to_i
         minutes_played = seconds_played / 60
