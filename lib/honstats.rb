@@ -14,3 +14,4 @@ require 'fileutils'
 
 require "#{File.dirname(__FILE__)}/honstats/base.rb"
 Dir["#{File.dirname(__FILE__)}/honstats/*.rb"].each { |source_file| require source_file }
+Dir["#{File.dirname(__FILE__)}/honstats/*/*.rb"].each { |source_file| require source_file }
