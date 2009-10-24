@@ -5,19 +5,21 @@ module HonStats
     API_FILE = "/xml_requester.php"
 
     # Constructs a API-friendly URL
-    def self.construct_url(api_method, params)
+    def self.construct_url(api_method, params = nil)
       "#{API_FILE}?f=#{api_method}#{hash2get(params)}"
     end
 
     # Converts a hash to a GET string
     def self.hash2get(h)
       get_string = ""
-      h.each_pair do |key, value|
-        if value.is_a?(String)
-          get_string += "&#{key.to_s}=#{CGI::escape(value.to_s)}"
-        elsif value.is_a?(Array)
-          value.each do |vals|
-            get_string += "&#{key.to_s}=#{CGI::escape(vals.to_s)}"
+      if h
+        h.each_pair do |key, value|
+          if value.is_a?(String)
+            get_string += "&#{key.to_s}=#{CGI::escape(value.to_s)}"
+          elsif value.is_a?(Array)
+            value.each do |vals|
+              get_string += "&#{key.to_s}=#{CGI::escape(vals.to_s)}"
+            end
           end
         end
       end
@@ -38,6 +40,16 @@ module HonStats
         client.errback { self.fail }
       end
       xml
+    end
+
+    def self.returner(data)
+      if data.count > 1
+        data
+      elsif data.count == 1
+        data[0]
+      else
+        nil
+      end
     end
 
   end

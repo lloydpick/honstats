@@ -16,7 +16,7 @@ module HonStats
       end
     end
 
-    def self.by_id(match_id, *others)
+    def self.find_by_id(match_id, *others)
       match_id = match_id.to_s.to_a | others if others
       params = { 'opt' => 'mid', 'mid[]' => match_id }
       parse_stats(construct_url("match_stats", params))
@@ -80,14 +80,7 @@ module HonStats
           matches << m
         end
 
-        if matches.count > 1
-          matches
-        elsif matches.count == 1
-          matches[0]
-        else
-          nil
-        end
-
+        returner(matches)
       else
         nil
       end

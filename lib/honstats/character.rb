@@ -17,13 +17,13 @@ module HonStats
       end
     end
 
-    def self.by_nickname(nickname, *others)
+    def self.find_by_nickname(nickname, *others)
       nickname = nickname.to_a | others if others
       params = { 'opt' => 'nick', "nick[]" => nickname }
       parse_stats(construct_url("player_stats", params))
     end
 
-    def self.by_id(user_id, *others)
+    def self.find_by_id(user_id, *others)
       user_id = user_id.to_s.to_a | others if others
       params = { 'opt' => 'aid', 'aid[]' => user_id }
       parse_stats(construct_url("player_stats", params))
@@ -43,14 +43,7 @@ module HonStats
           chars << Character.new(stats)
         end
 
-        if chars.count > 1
-          chars
-        elsif chars.count == 1
-          chars[0]
-        else
-          nil
-        end
-        
+        returner(chars)
       else
         nil
       end
