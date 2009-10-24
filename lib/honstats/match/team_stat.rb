@@ -1,7 +1,7 @@
 module HonStats
   class TeamStat < Team
 
-    attr_accessor :wins, :losses, :concedes, :concedevotes, :buybacks, :kicked,
+    attr_reader :wins, :losses, :concedes, :concedevotes, :buybacks, :kicked,
       :avg_score, :herokills, :herodmg, :heroexp, :herokillsgold, :heroassists,
       :deaths, :goldlost2death, :secs_dead, :teamcreepkills, :teamcreepdmg,
       :teamcreepexp, :teamcreepgold, :neutralcreepkills, :neutralcreepdmg,

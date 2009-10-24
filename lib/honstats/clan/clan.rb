@@ -1,7 +1,7 @@
 module HonStats
   class Clan < Base
 
-    attr_accessor :clan_id, :name, :tag, :create_date, :creator, :title,
+    attr_reader :clan_id, :name, :tag, :create_date, :creator, :title,
       :hello_msg, :recruit_txt, :app_accept, :active, :logo, :idleWarn,
       :activeIndex
 
@@ -11,20 +11,17 @@ module HonStats
       end
     end
 
-    def self.find_by_name(name, *others)
-      name = name.to_a | others if others
+    def self.find_by_name(*name)
       params = { 'opt' => 'cname', "cname[]" => name }
       parse_stats(construct_url("clan_info", params))
     end
 
-    def self.find_by_tag(tag, *others)
-      tag = tag.to_a | others if others
+    def self.find_by_tag(*tag)
       params = { 'opt' => 'tag', "tag[]" => tag }
       parse_stats(construct_url("clan_info", params))
     end
 
-    def self.find_by_id(clan_id, *others)
-      clan_id = clan_id.to_s.to_a | others if others
+    def self.find_by_id(*clan_id)
       params = { 'opt' => 'cid', 'cid[]' => clan_id }
       parse_stats(construct_url("clan_info", params))
     end

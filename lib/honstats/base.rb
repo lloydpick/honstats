@@ -1,9 +1,12 @@
 module HonStats
   class Base
 
+    # Stats API Hostname
     API_URL = "xml.heroesofnewerth.com"
+    # Stats API Filename
     API_FILE = "/xml_requester.php"
 
+    private
     # Constructs a API-friendly URL
     def self.construct_url(api_method, params = nil)
       "#{API_FILE}?f=#{api_method}#{hash2get(params)}"
@@ -26,6 +29,7 @@ module HonStats
       get_string
     end
 
+    # GET's and parses the XML reply from the API server
     def self.get_xml_data(url)
       xml = nil
       EM.run do
@@ -42,6 +46,7 @@ module HonStats
       xml
     end
 
+    # Allows us to return data from the methods easier
     def self.returner(data)
       if data.count > 1
         data

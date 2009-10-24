@@ -1,7 +1,7 @@
 module HonStats
   class Character < Base
 
-    attr_accessor :user_id, :nickname, :games_played, :wins, :losses, :concedes,
+    attr_reader :user_id, :nickname, :games_played, :wins, :losses, :concedes,
       :concedevotes, :buybacks, :discos, :kicked, :pub_skill, :pub_count,
       :amm_solo_rating, :amm_solo_count, :amm_team_rating, :amm_team_count,
       :avg_score, :herokills, :herodmg, :heroexp, :herokillsgold, :heroassists,
@@ -17,14 +17,14 @@ module HonStats
       end
     end
 
-    def self.find_by_nickname(nickname, *others)
-      nickname = nickname.to_a | others if others
+    # Lookup character stats by nickname
+    def self.find_by_nickname(*nickname)
       params = { 'opt' => 'nick', "nick[]" => nickname }
       parse_stats(construct_url("player_stats", params))
     end
 
-    def self.find_by_id(user_id, *others)
-      user_id = user_id.to_s.to_a | others if others
+    # Lookup character stats by user id
+    def self.find_by_id(*user_id)
       params = { 'opt' => 'aid', 'aid[]' => user_id }
       parse_stats(construct_url("player_stats", params))
     end

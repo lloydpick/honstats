@@ -1,7 +1,7 @@
 module HonStats
   class ItemUsage < Base
 
-    attr_accessor :item_id, :cli_name, :used
+    attr_reader :item_id, :cli_name, :used
 
     def initialize(params)
       params.each do |key|

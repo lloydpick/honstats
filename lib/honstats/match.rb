@@ -1,14 +1,14 @@
 module HonStats
   class Match < Base
 
-    attr_accessor :match_id, :name, :server_id, :map, :map_version, :time_played,
+    attr_reader :match_id, :name, :server_id, :map, :map_version, :time_played,
       :file_host, :file_size, :file_name, :c_state, :version, :mdt, :mname,
       :class, :private, :nm, :sd, :rd, :dm, :league, :max_players, :tier,
       :no_repick, :no_agi, :drp_itm, :no_timer, :rev_hs, :no_swap, :no_int,
       :alt_pick, :veto, :shuf, :no_str, :no_pups, :dup_h, :ap, :ar, :em,
       :rs, :nl, :officl
 
-    attr_accessor :teams
+    attr_reader :teams
 
     def initialize(params)
       params.each do |key|
@@ -16,8 +16,7 @@ module HonStats
       end
     end
 
-    def self.find_by_id(match_id, *others)
-      match_id = match_id.to_s.to_a | others if others
+    def self.find_by_id(*match_id)
       params = { 'opt' => 'mid', 'mid[]' => match_id }
       parse_stats(construct_url("match_stats", params))
     end

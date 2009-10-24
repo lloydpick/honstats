@@ -1,7 +1,7 @@
 module HonStats
   class HeroUsage < Base
 
-    attr_accessor :hero_id, :cli_name, :used
+    attr_reader :hero_id, :cli_name, :used
 
     def initialize(params)
       params.each do |key|
@@ -9,6 +9,7 @@ module HonStats
       end
     end
 
+    # Retrieves all the Hero Usage statistics
     def self.fetch
       parse_stats(construct_url("hero_usage"))
     end

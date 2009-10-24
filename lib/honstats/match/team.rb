@@ -1,9 +1,9 @@
 module HonStats
   class Team < Match
 
-    attr_accessor :side
+    attr_reader :side
 
-    attr_accessor :players, :stats
+    attr_reader :players, :stats
 
     def initialize(params)
       params.each do |key|

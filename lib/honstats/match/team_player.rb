@@ -1,7 +1,7 @@
 module HonStats
   class TeamPlayer < Match
 
-    attr_accessor :user_id, :hero_cli, :nickname, :cli_name, :clan_id, :hero_id,
+    attr_reader :user_id, :hero_cli, :nickname, :cli_name, :clan_id, :hero_id,
       :position, :team, :level, :wins, :losses, :concedes, :concedevotes,
       :buybacks, :discos, :kicked, :pub_skill, :pub_count, :amm_solo_rating,
       :amm_solo_count, :amm_team_rating, :amm_team_count, :avg_score,
@@ -12,7 +12,7 @@ module HonStats
       :denies, :exp_denied, :gold, :gold_spent, :exp, :actions, :secs,
       :consumables, :wards
 
-    attr_accessor :team
+    attr_reader :team
 
     def initialize(params)
       params.each do |key|
