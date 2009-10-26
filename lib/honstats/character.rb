@@ -17,10 +17,6 @@ module HonStats
       end
     end
 
-    def hero_usage
-      CharacterHeroUsage.find_by_id(self.user_id)
-    end
-
     # Lookup character stats by nickname
     def self.find_by_nickname(*nickname)
       params = { 'opt' => 'nick', "nick[]" => nickname }

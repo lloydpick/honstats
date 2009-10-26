@@ -11,6 +11,10 @@ module HonStats
       end
     end
 
+    def roster
+      ClanMember.find_by_id(self.clan_id)
+    end
+
     def self.find_by_name(*name)
       params = { 'opt' => 'cname', "cname[]" => name }
       parse_stats(construct_url("clan_info", params))
