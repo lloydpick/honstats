@@ -4,11 +4,11 @@ require 'rake'
 begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
-    gem.name = "hon-stats"
+    gem.name = "honstats"
     gem.summary = %Q{Ruby Gem for accessing Heroes of Newerth player statistics}
     gem.description = %Q{Ruby Gem for accessing Heroes of Newerth player statistics}
     gem.email = "julio@monteiro.eti.br"
-    gem.homepage = "http://github.com/lloydpick/hon-stats"
+    gem.homepage = "http://github.com/lloydpick/honstats"
     gem.authors = ["Lloyd Pick", "Julio Monteiro"]
     gem.add_development_dependency "rspec", ">= 1.2.9"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
@@ -41,7 +41,7 @@ Rake::RDocTask.new do |rdoc|
   version = File.exist?('VERSION') ? File.read('VERSION') : ""
 
   rdoc.rdoc_dir = 'rdoc'
-  rdoc.title = "hon-stats #{version}"
+  rdoc.title = "honstats #{version}"
   rdoc.rdoc_files.include('README*')
   rdoc.rdoc_files.include('lib/**/*.rb')
 end
