@@ -3,7 +3,7 @@ module HonStats
 
     attr_reader :side
 
-    attr_reader :players, :stats
+    attr_accessor :players, :stats
 
     def initialize(params)
       params.each do |key|

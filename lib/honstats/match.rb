@@ -8,7 +8,7 @@ module HonStats
       :alt_pick, :veto, :shuf, :no_str, :no_pups, :dup_h, :ap, :ar, :em,
       :rs, :nl, :officl
 
-    attr_reader :teams
+    attr_accessor :teams
 
     def initialize(params)
       params.each do |key|
