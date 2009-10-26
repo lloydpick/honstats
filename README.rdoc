@@ -4,6 +4,18 @@ Ruby interface for Heroes of Newerth game's players statistics.
 
 This branch (dev) is a complete rewrite, so expect new ways to request HoN's statistics.
 
+== Code
+
+* Github: http://github.com/lloydpick/hon-stats
+
+== Getting Started
+
+This is just a simple and very small example about what hon-stats can do:
+
+  >> require 'honstats'
+  >> HonStats::Character.find_by_nickname("foo").pub_skill
+  => "1500"
+
 == Copyright
 
 Copyright (c) 2009 Lloyd Pick. See LICENSE for details.
