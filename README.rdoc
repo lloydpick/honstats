@@ -1,0 +1,9 @@
+= hon-stats
+
+Ruby interface for Heroes of Newerth game's players statistics.
+
+This branch (dev) is a complete rewrite, so expect new ways to request HoN's statistics.
+
+== Copyright
+
+Copyright (c) 2009 Lloyd Pick. See LICENSE for details.
