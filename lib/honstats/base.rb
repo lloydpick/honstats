@@ -48,9 +48,9 @@ module HonStats
 
     # Allows us to return data from the methods easier
     def self.returner(data)
-      if data.count > 1
+      if data.size > 1
         data
-      elsif data.count == 1
+      elsif data.size == 1
         data[0]
       else
         nil
