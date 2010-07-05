@@ -15,12 +15,12 @@ This is just a simple and very small example about what honstats can do:
   >> require 'honstats'
   
   >> character = HonStats::Character.find_by_nickname("Limi")
-  >> character.pub_skill
-  => "1553"
+  >> character.public_stats.pub_skill
+  => 1553
 
   >> character = HonStats::Character.find_by_id(676)
-  >> character.wards
-  => "37"
+  >> character.ranked_stats.wards
+  => 37
 
 == Note on Patches/Pull Requests
 
