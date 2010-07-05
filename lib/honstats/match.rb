@@ -2,11 +2,11 @@ module HonStats
   class Match < Base
 
     attr_reader :match_id, :name, :server_id, :map, :map_version, :time_played,
-      :file_host, :file_size, :file_name, :c_state, :version, :mdt, :mname,
-      :class, :private, :nm, :sd, :rd, :dm, :league, :max_players, :tier,
-      :no_repick, :no_agi, :drp_itm, :no_timer, :rev_hs, :no_swap, :no_int,
-      :alt_pick, :veto, :shuf, :no_str, :no_pups, :dup_h, :ap, :ar, :em,
-      :rs, :nl, :officl
+      :file_host, :file_size, :file_name, :c_state, :version, :mdt, :avgpsr, :url,
+      :size, :mname, :class, :private, :nm, :sd, :rd, :dm, :bd, :bp, :cd, :cm, :league,
+      :max_players, :tier, :no_repick, :no_agi, :drp_itm, :no_timer, :rev_hs, :no_swap,
+      :no_int, :alt_pick, :veto, :shuf, :no_str, :no_pups, :dup_h, :ap, :ar, :em,
+      :rs, :nl, :officl, :no_stats, :ab, :hardcore, :dev_heroes
 
     attr_accessor :teams
 

@@ -10,7 +10,7 @@ module HonStats
       :teamcreepexp, :teamcreepgold, :neutralcreepkills, :neutralcreepdmg,
       :neutralcreepexp, :neutralcreepgold, :bdmg, :bdmgexp, :razed, :bgold,
       :denies, :exp_denied, :gold, :gold_spent, :exp, :actions, :secs,
-      :consumables, :wards
+      :consumables, :wards, :time_earning_exp
 
     attr_reader :team
 

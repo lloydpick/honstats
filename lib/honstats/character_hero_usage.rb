@@ -9,7 +9,7 @@ module HonStats
       :teamcreepkills, :teamcreepdmg, :teamcreepexp, :teamcreepgold,
       :neutralcreepkills, :neutralcreepdmg, :neutralcreepexp, :neutralcreepgold,
       :bdmg, :bdmgexp, :razed, :bgold, :denies, :exp_denied, :gold, :gold_spent,
-      :exp, :actions, :secs, :consumables, :wards
+      :exp, :actions, :secs, :consumables, :wards, :time_earning_exp
 
     def initialize(params)
       params.each do |key|
