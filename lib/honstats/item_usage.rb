@@ -20,7 +20,7 @@ module HonStats
 
         result.find('//usage/item_usage').each do |h|
           hero = []
-          hero << { 'item_id' => h.find_first('@hid').value }
+          hero << { 'item_id' => h.find_first('@id').value }
           h.find('stat').each do |stat|
             hero << stat.attributes.inject({}) { |h, a| h[a.value] = stat.content(); h }
           end
