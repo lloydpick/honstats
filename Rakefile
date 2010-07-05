@@ -10,10 +10,10 @@ begin
     gem.email = "julio@monteiro.eti.br"
     gem.homepage = "http://github.com/lloydpick/honstats"
     gem.authors = ["Lloyd Pick", "Julio Monteiro"]
-    gem.add_development_dependency "rspec", ">= 1.2.9"
+    gem.add_development_dependency "rspec", ">= 1.3.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
-    gem.add_dependency('libxml-ruby', '>= 0.8.3')
-    gem.add_dependency('eventmachine', '>= 0.12.8')
+    gem.add_dependency('libxml-ruby', '>= 1.1.4')
+    gem.add_dependency('eventmachine', '>= 0.12.10')
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
