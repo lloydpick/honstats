@@ -5,11 +5,12 @@ begin
   require 'jeweler'
   Jeweler::Tasks.new do |gem|
     gem.name = "honstats"
+    gem.version = "2.0.0"
     gem.summary = %Q{Ruby Gem for accessing Heroes of Newerth player statistics}
     gem.description = %Q{Ruby Gem for accessing Heroes of Newerth player statistics}
-    gem.email = "julio@monteiro.eti.br"
+    gem.email = "lloydpick@gmail.com"
     gem.homepage = "http://github.com/lloydpick/honstats"
-    gem.authors = ["Lloyd Pick", "Julio Monteiro"]
+    gem.authors = ["Lloyd Pick", "Julio Monteiro", "Pol Llovet"]
     gem.add_development_dependency "rspec", ">= 1.3.0"
     # gem is a Gem::Specification... see http://www.rubygems.org/read/chapter/20 for additional settings
     gem.add_dependency('libxml-ruby', '>= 1.1.4')
